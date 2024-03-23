@@ -7,76 +7,14 @@ use base64::prelude::*;
 use cookie::Cookie;
 use metrics::gauge;
 use reqwest::Client;
-use serde::Deserialize;
 use tokio::{task::JoinHandle, time::interval};
 
+pub use self::types::Password;
+use self::types::{SessionId, WanStatus};
+
+mod types;
+
 const ADDR: &str = "https://192.168.1.1";
-
-struct SessionId(String);
-
-pub struct Password(String);
-
-impl<T> From<T> for Password
-where
-    T: Into<String>,
-{
-    fn from(value: T) -> Self {
-        Self(value.into())
-    }
-}
-
-#[derive(Debug, Deserialize)]
-#[allow(dead_code, non_snake_case)]
-struct WanStatus {
-    CELL_Roaming_Enable: bool,
-    INTF_Status: String,
-    INTF_IMEI: String,
-    INTF_Current_Access_Technology: String,
-    INTF_Network_In_Use: String,
-    INTF_RSSI: i32,
-    INTF_Supported_Bands: String,
-    INTF_Current_Band: String,
-    INTF_Cell_ID: i32,
-    INTF_PhyCell_ID: i32,
-    INTF_Uplink_Bandwidth: String,
-    INTF_Downlink_Bandwidth: String,
-    INTF_RFCN: String,
-    INTF_RSRP: i32,
-    INTF_RSRQ: i32,
-    INTF_RSCP: i32,
-    INTF_EcNo: i32,
-    INTF_TAC: i32,
-    INTF_LAC: i32,
-    INTF_RAC: i32,
-    INTF_BSIC: i32,
-    INTF_SINR: i32,
-    INTF_CQI: i32,
-    INTF_MCS: i32,
-    INTF_RI: i32,
-    INTF_PMI: i32,
-    INTF_Module_Software_Version: String,
-    USIM_Status: String,
-    USIM_IMSI: String,
-    USIM_ICCID: String,
-    USIM_PIN_Protection: bool,
-    USIM_PIN_Remaining_Attempts: i32,
-    Passthru_Enable: bool,
-    Passthru_Mode: String,
-    Passthru_MacAddr: String,
-    NSA_Enable: bool,
-    NSA_MCC: String,
-    NSA_MNC: String,
-    NSA_PhyCellID: i32,
-    NSA_RFCN: i32,
-    NSA_Band: String,
-    NSA_RSSI: i32,
-    // NSA_UplinkBandwidth: null,
-    // NSA_DownlinkBandwidth: null,
-    NSA_RSRP: i32,
-    NSA_RSRQ: i32,
-    NSA_SINR: i32,
-    // SCC_Info: []
-}
 
 pub fn start_mon(password: impl Into<Password>) -> JoinHandle<()> {
     let password = password.into();
