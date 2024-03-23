@@ -13,6 +13,7 @@ use crate::speedtestnet::types::SpeedTestResult;
 mod types;
 
 const FIVE_MINS: Duration = Duration::from_secs(60 * 5);
+const HYPEROPTIC_SERVER_ID: &str = "14679";
 
 pub fn start_mon() -> JoinHandle<()> {
     tokio::spawn(async {
@@ -30,12 +31,10 @@ pub fn start_mon() -> JoinHandle<()> {
 
 async fn run_speed_test() -> Result<()> {
     let mut child = Command::new("speedtest")
-        .args(["-f", "json"])
+        .args(["-s", HYPEROPTIC_SERVER_ID, "-f", "json"])
         .stderr(Stdio::null())
         .stdout(Stdio::piped())
         .spawn()?;
-
-    // TODO: change to line-by-line parsing, each line is a jayson blob
 
     let mut lines = BufReader::new(child.stdout.take().unwrap()).lines();
 
