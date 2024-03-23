@@ -152,8 +152,13 @@ fn handle_metrics(wan_status: WanStatus) {
         0.0
     });
 
-    gauge!("cellular.RSSI").set(wan_status.INTF_RSSI);
-    gauge!("cellular.RSRP").set(wan_status.INTF_RSRP);
-    gauge!("cellular.SINR").set(wan_status.INTF_SINR);
-    gauge!("cellular.RSRQ").set(wan_status.INTF_RSRQ);
+    gauge!("cellular.RSSI", "type" => "INTF").set(wan_status.INTF_RSSI);
+    gauge!("cellular.RSRP", "type" => "INTF").set(wan_status.INTF_RSRP);
+    gauge!("cellular.SINR", "type" => "INTF").set(wan_status.INTF_SINR);
+    gauge!("cellular.RSRQ", "type" => "INTF").set(wan_status.INTF_RSRQ);
+
+    gauge!("cellular.RSSI", "type" => "NSA").set(wan_status.NSA_RSSI);
+    gauge!("cellular.RSRP", "type" => "NSA").set(wan_status.NSA_RSRP);
+    gauge!("cellular.SINR", "type" => "NSA").set(wan_status.NSA_SINR);
+    gauge!("cellular.RSRQ", "type" => "NSA").set(wan_status.NSA_RSRQ);
 }

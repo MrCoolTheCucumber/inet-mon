@@ -6,11 +6,12 @@ use tokio::signal;
 
 mod cfspeedtest;
 mod nr5103e;
+mod speedtestnet;
 
 #[tokio::main]
 async fn main() -> Result<()> {
     tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::INFO)
+        .with_max_level(tracing::Level::DEBUG)
         .init();
 
     PrometheusBuilder::install(PrometheusBuilder::new())?;
@@ -19,6 +20,7 @@ async fn main() -> Result<()> {
 
     let _speedtest_handle = cfspeedtest::start_mon();
     let _nr5103e_handle = nr5103e::start_mon(password);
+    let _speedtestnet_handle = speedtestnet::start_mon();
 
     match signal::ctrl_c().await {
         Ok(_) => tracing::info!("Shutting down..."),

@@ -7,9 +7,11 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1"
+async-process = "2.1"
 base64 = "0.22"
 cfspeedtest = "1.2"
 cookie = "0.18"
+futures = "0.3"
 metrics = "0.22"
 metrics-exporter-prometheus = "0.14"
 reqwest = { version = "0.11", features = ["json"] }
