@@ -62,8 +62,9 @@ async fn run_speed_test() -> Result<()> {
 fn handle_result(json: serde_json::Value) -> Result<()> {
     let speedtest_results = serde_json::from_value::<SpeedTestResult>(json.clone())?;
 
-    let download_bandwidth = speedtest_results.download.bandwidth as f64 / 175_000.0;
-    let upload_bandwidth = speedtest_results.upload.bandwidth as f64 / 175_000.0;
+    // 1 Megabit per second = 125_000 Bytes per second (results are in Bps)
+    let download_bandwidth = speedtest_results.download.bandwidth as f64 / 125_000.0;
+    let upload_bandwidth = speedtest_results.upload.bandwidth as f64 / 125_000.0;
 
     gauge!("speedtestnet.bandwidth", "type" => "download").set(download_bandwidth);
     gauge!("speedtestnet.bandwidth", "type" => "upload").set(upload_bandwidth);
